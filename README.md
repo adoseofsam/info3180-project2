@@ -7,8 +7,8 @@ Users can also add a car to their favourites so they can quickly get back to
 it.
 
 # Contributors:
-Arnoldo Daley
-Jhanelle Douglas
-Logan Halsall
-Samantha James
-Kevin Johnson
+* Arnoldo Daley
+* Jhanelle Douglas
+* Logan Halsall
+* [Samantha James](https://github.com/adoseofsam "Samantha James")
+* Kevin Johnson
