@@ -8,4 +8,4 @@ db = SQLAlchemy(app)
 app.config.from_object(Config)
 csrf = CSRFProtect(app)
 
-from app import views,models
+from app import views
