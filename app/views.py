@@ -4,10 +4,11 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-import os
+import os, datetime
 from app import app
-from flask import render_template, request, redirect, url_for, flash, session, abort
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
+from .forms import RegistrationForm, LoginForm, AddNewCarForm
 
 
 ###
@@ -23,46 +24,194 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="Logan Halsall")
 
 
-@app.route('/upload', methods=['POST', 'GET'])
-def upload():
-    if not session.get('logged_in'):
-        abort(401)
-
-    # Instantiate your form class
-
-    # Validate file upload on submit
-    if request.method == 'POST':
-        # Get file data and save to your uploads folder
-
-        flash('File Saved', 'success')
-        return redirect(url_for('home'))
-
-    return render_template('upload.html')
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    root_dir = os.getcwd()
+    return send_from_directory(os.path.join(root_dir, app.config['UPLOAD_FOLDER']), filename)
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/files')
+def files():
+    filenames = get_uploaded_images()
+    return render_template('files.html', filenames=filenames)
+
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    filenames = []
+    for subdir, dirs, files in os.walk(rootdir + app.config['UPLOAD_FOLDER'][1:]):
+        for file in files:
+            filenames.append(file)
+    return filenames
+
+
+"""
+Start of project2 bit.
+"""
+#Accepts user information and saves it to the database.
+#HTTP Method: 'POST'
+@app.route('/api/register', methods=['POST', 'GET'])
+def register():
+
+    form = RegistrationForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        name = form.name.data
+        email = form.email.data
+        location = form.location.data
+        biography = form.biography.data
+        photo = form.photo.data
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        date_joined = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        new_user = {
+            'message': 'User Registration Successful.',
+            'username': username,
+            'password': password,
+            'name': name,
+            'email': email,
+            'location': location,
+            'biography': biography,
+            'filename': filename,
+            'date_joined': date_joined
+        }
+        return jsonify(new_user=new_user)
+    """
+    else:
+        errors = form_errors(form)
+        return jsonify(errors=errors)
+    """
+    return render_template("registration_form.html", form=form)
+
+
+#Accepts login credentials as username and password.
+#HTTP Method: 'POST'
+@app.route('/api/auth/login', methods=['POST'])
 def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['ADMIN_USERNAME'] or request.form['password'] != app.config['ADMIN_PASSWORD']:
-            error = 'Invalid username or password'
-        else:
-            session['logged_in'] = True
-            
-            flash('You were logged in', 'success')
-            return redirect(url_for('upload'))
-    return render_template('login.html', error=error)
+
+    #if current_user.is_authenticated:
+
+    form = LoginForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        if form.username.data:
+            username = form.username.data
+            password = form.password.data
+
+        return 2
 
 
-@app.route('/logout')
+#Logout a user.
+#HTTP Method: 'POST'
+@app.route('/api/auth/logout', methods=['POST'])
 def logout():
-    session.pop('logged_in', None)
-    flash('You were logged out', 'success')
-    return redirect(url_for('home'))
+    if request.method == 'POST':
+        #logout_user()
+        return 3
 
+
+#Return all cars ['GET'] or add new cars ['POST'].
+#HTTP Method: 'GET' OR 'POST'
+@app.route('/api/cars', methods=['GET', 'POST'])
+def cars():
+
+    form = AddNewCarForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        description = form.description.data
+        make = form.make.data
+        model = form.model.data
+        colour = form.colour.data
+        year = form.year.data
+        transmission = form.transmission.data
+        car_type = form.car_type.data
+        price = form.price.data
+        photo = form.photo.data
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        new_car = {
+            'message': 'New Car Added.',
+            'description': description,
+            'make': make,
+            'model': model,
+            'colour': colour,
+            'year': year,
+            'transmission': transmission,
+            'car_type': car_type,
+            'price': price,
+            'filename': filename
+        }
+
+        return jsonify(new_car=new_car)
+    """
+    else:
+        errors = form_errors(form)
+        return jsonify(errors=errors)
+    """
+    return render_template("add_new_car_form.html", form=form)
+
+
+#Get Details of a specific car.
+#HTTP Method: 'GET'
+@app.route('/api/cars/<car_id>', methods=['GET'])
+def get_car():
+    if request.method == 'GET':
+        return 6
+
+
+#Add car to Favourites for logged in user.
+#HTTP Method: 'POST'
+@app.route('/api/cars/<car_id>/favourite', methods=['POST'])
+def add_favourite():
+    if request.method == 'POST':
+        return 7
+
+
+#Search for cars by make or model.
+#HTTP Method: 'GET'
+@app.route('/api/search', methods=['GET'])
+def search():
+    if request.method == 'GET':
+        return 8
+
+
+#Get Details of a user.
+#HTTP Method: 'GET'
+@app.route('/api/users/<user_id>', methods=['GET'])
+def get_user():
+    if request.method == 'GET':
+        return 9
+
+
+#Get cars that a user has favourited.
+#HTTP Method: 'GET'
+@app.route('/api/users/<user_id>/favourites', methods=['GET'])
+def get_favourites(user_id):
+    if request.method == 'GET':
+        return 10
+
+
+# Here we define a function to collect form errors from Flask-WTF
+# which we can later use
+def form_errors(form):
+    error_messages = []
+    """Collects form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            message = u"Error in the %s field - %s" % (
+                    getattr(form, field).label.text,
+                    error
+                )
+            error_messages.append(message)
+
+    return error_messages
 
 ###
 # The functions below should be applicable to all Flask apps.
@@ -74,8 +223,7 @@ def flash_errors(form):
         for error in errors:
             flash(u"Error in the %s field - %s" % (
                 getattr(form, field).label.text,
-                error
-), 'danger')
+                error), 'danger')
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main %}
+{% include 'flash_messages.html' %}
+<h2>Your uploaded photos.</h2>
+<ul id="img-list">
+    {% for filename in filenames %}
+    <li><img id="img-list-item" src="{{ url_for('get_image', filename=filename) }}" /></li>
+    {% endfor %}
+</ul>
+{% endblock %}
