@@ -92,7 +92,7 @@ def register():
 
 #Accepts login credentials as username and password.
 #HTTP Method: 'POST'
-@app.route('/api/auth/login', methods=['POST'])
+@app.route('/api/auth/login', methods=['GET', 'POST'])
 def login():
 
     #if current_user.is_authenticated:
@@ -104,7 +104,18 @@ def login():
             username = form.username.data
             password = form.password.data
 
-        return 2
+            message = '{0} Successfully Logged In.'.format(username)
+
+            login = {
+                'message': message,
+            }
+            return jsonify(login=login)
+    """        
+    else:
+        errors = form_errors(form)
+        return jsonify(errors=errors)
+    """        
+    return render_template("login_form.html", form=form)
 
 
 #Logout a user.
@@ -148,7 +159,6 @@ def cars():
             'price': price,
             'filename': filename
         }
-
         return jsonify(new_car=new_car)
     """
     else:
