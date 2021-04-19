@@ -6,6 +6,13 @@ available cars and be able to view some more information on those cars.
 Users can also add a car to their favourites so they can quickly get back to
 it.
 
+## DB Setup
+### Config File
+``` DATABASE_UR= postgresql://USERNAME:PASSWORD@localhost/DB_NAME ``` 
+
+### Run Migrations
+```python manage.py db upgrade``` 
+
 # Contributors:
 * [Arnoldo Daley](https://github.com/flxnaldo "Arnoldo Daley")
 * [Jhanelle Douglas](https://github.com/jhanelledouglas "Jhanelle Douglas")
