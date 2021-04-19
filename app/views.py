@@ -4,11 +4,14 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-import os, datetime
-from app import app
+import os
+from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, send_from_directory, jsonify
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
-from .forms import RegistrationForm, LoginForm, AddNewCarForm
+from app.forms import RegistrationForm, LoginForm, AddNewCarForm
+from app.models import Cars, Users, Favourites
+from werkzeug.security import check_password_hash
 
 
 ###
@@ -25,6 +28,12 @@ def home():
 def about():
     """Render the website's about page."""
     return render_template('about.html', name="Logan Halsall")
+
+
+@app.route('/secure-page')
+@login_required
+def secure_page():
+    return render_template('secure_page.html')
 
 
 @app.route('/uploads/<filename>')
@@ -68,18 +77,19 @@ def register():
         photo = form.photo.data
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        date_joined = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        user = Users(username=username, password=password, name=name, email=email, location=location, biography=biography, photo=filename)
+        db.session.add(user)
+        db.session.commit()
 
         new_user = {
             'message': 'User Registration Successful.',
             'username': username,
-            'password': password,
             'name': name,
             'email': email,
             'location': location,
             'biography': biography,
-            'filename': filename,
-            'date_joined': date_joined
+            'filename': filename
         }
         return jsonify(new_user=new_user)
     """
@@ -95,7 +105,8 @@ def register():
 @app.route('/api/auth/login', methods=['GET', 'POST'])
 def login():
 
-    #if current_user.is_authenticated:
+    if current_user.is_authenticated:
+        return redirect(url_for('secure_page'))
 
     form = LoginForm()
 
@@ -104,76 +115,100 @@ def login():
             username = form.username.data
             password = form.password.data
 
-            message = '{0} Successfully Logged In.'.format(username)
-
-            login = {
-                'message': message,
-            }
-            return jsonify(login=login)
+            user = Users.query.filter_by(username=username).first()
+            if user is not None and check_password_hash(user.password, password):
+                login_user(user)
+            
+                message = '{0} Successfully Logged In. User ID: {1}'.format(username, current_user.get_id())
+                login = {
+                    'message': message,
+                }
+                return jsonify(login=login)
     """        
     else:
         errors = form_errors(form)
         return jsonify(errors=errors)
-    """        
+    """
     return render_template("login_form.html", form=form)
 
 
 #Logout a user.
 #HTTP Method: 'POST'
-@app.route('/api/auth/logout', methods=['POST'])
+@app.route("/logout")
+@login_required
 def logout():
-    if request.method == 'POST':
-        #logout_user()
-        return 3
+    # Logout the user and end the session
+    logout_user()
+    return redirect(url_for('home'))
 
 
 #Return all cars ['GET'] or add new cars ['POST'].
 #HTTP Method: 'GET' OR 'POST'
 @app.route('/api/cars', methods=['GET', 'POST'])
+@login_required
 def cars():
 
     form = AddNewCarForm()
 
-    if request.method == 'POST' and form.validate_on_submit():
-        description = form.description.data
-        make = form.make.data
-        model = form.model.data
-        colour = form.colour.data
-        year = form.year.data
-        transmission = form.transmission.data
-        car_type = form.car_type.data
-        price = form.price.data
-        photo = form.photo.data
-        filename = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if current_user.is_authenticated:
+        if request.method == 'POST' and form.validate_on_submit():
+            description = form.description.data
+            make = form.make.data
+            model = form.model.data
+            colour = form.colour.data
+            year = form.year.data
+            transmission = form.transmission.data
+            car_type = form.car_type.data
+            price = form.price.data
+            photo = form.photo.data
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        new_car = {
-            'message': 'New Car Added.',
-            'description': description,
-            'make': make,
-            'model': model,
-            'colour': colour,
-            'year': year,
-            'transmission': transmission,
-            'car_type': car_type,
-            'price': price,
-            'filename': filename
-        }
-        return jsonify(new_car=new_car)
-    """
-    else:
-        errors = form_errors(form)
-        return jsonify(errors=errors)
-    """
+            car = Cars(description=description, make=make, model=model, colour=colour, year=year, transmission=transmission, car_type=car_type, price=float(price), photo=filename, user_id=current_user.get_id())
+            db.session.add(car)
+            db.session.commit()
+
+            new_car = {
+                'message': 'New Car Added.',
+                'description': description,
+                'make': make,
+                'model': model,
+                'colour': colour,
+                'year': year,
+                'transmission': transmission,
+                'car_type': car_type,
+                'price': price,
+                'filename': filename
+            }
+            return jsonify(new_car=new_car)
+        """
+        else:
+            errors = form_errors(form)
+            return jsonify(errors=errors)
+        """
     return render_template("add_new_car_form.html", form=form)
 
 
 #Get Details of a specific car.
 #HTTP Method: 'GET'
 @app.route('/api/cars/<car_id>', methods=['GET'])
-def get_car():
+def get_car(car_id):
     if request.method == 'GET':
-        return 6
+        cr = Cars.query.filter_by(id=car_id).first()
+        car = {
+            'id': cr.id,
+            'description': cr.description,
+            'make': cr.make,
+            'model': cr.model,
+            'colour': cr.colour,
+            'year': cr.year,
+            'transmission': cr.transmission,
+            'car_type': cr.car_type,
+            'price': cr.price,
+            'photo': cr.photo,
+            'user_id': cr.user_id
+        }
+        return jsonify(car=car)
 
 
 #Add car to Favourites for logged in user.
@@ -195,9 +230,20 @@ def search():
 #Get Details of a user.
 #HTTP Method: 'GET'
 @app.route('/api/users/<user_id>', methods=['GET'])
-def get_user():
+def get_user(user_id):
     if request.method == 'GET':
-        return 9
+        usr = Users.query.filter_by(id=user_id).first()
+        user = {
+            'id': usr.id,
+            'username': usr.username,
+            'name': usr.name,
+            'email': usr.email,
+            'location': usr.location,
+            'biography': usr.biography,
+            'photo': usr.photo,
+            'date_joined': usr.date_joined
+        }
+        return jsonify(user=user)
 
 
 #Get cars that a user has favourited.
@@ -206,6 +252,17 @@ def get_user():
 def get_favourites(user_id):
     if request.method == 'GET':
         return 10
+
+
+
+
+# user_loader callback. This callback is used to reload the user object from
+# the user ID stored in the session
+@login_manager.user_loader
+def load_user(id):
+    return Users.query.get(int(id))
+
+
 
 
 # Here we define a function to collect form errors from Flask-WTF
@@ -223,9 +280,6 @@ def form_errors(form):
 
     return error_messages
 
-###
-# The functions below should be applicable to all Flask apps.
-###
 
 # Flash errors from the form if validation fails
 def flash_errors(form):
@@ -235,6 +289,10 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error), 'danger')
 
+
+###
+# The functions below should be applicable to all Flask apps.
+###
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
     """Send your static text file."""
