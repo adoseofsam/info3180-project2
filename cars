@@ -1,0 +1,42 @@
+export SECRET_KEY=SecretKey
+export DATABASE_URL=postgresql://project2:password@localhost/project2
+
+user = UserProfile(username="logan", password="password", name="logan", email="logan@logan.com", location="Jamaica", biography="Something about me.", photo="male-profile-pic.png")
+
+Cars
+description=The car’s name encapsulates the true significance of all that has been achieved in terms of performance. The reference to the 90th anniversary of the foundation of Scuderia Ferrari underscores the strong link that has always existed between Ferrari’s track and road cars. A brilliant encapsulation of the most advanced technologies developed in Maranello, the SF90 Stradale is also the perfect demonstration of how Ferrari immediately transitions the knowledge and skills it acquires in competition to its production cars.
+make=Ferrari
+model=SF90 Stradale
+colour=Red
+year=2020
+transmission=Manual
+car_type=Coupe
+price=500000.75
+
+description=The Ferrari 488 Pista is powered by the most powerful V8 engine in the Maranello marque’s history and is the company’s special series sports car with the highest level yet of technological transfer from racing. In fact the name, meaning ‘track’ in Italian, was chosen speciﬁcally to testify to Ferrari’s unparalleled heritage in motor sports. Technically, the Ferrari 488 Pista encompasses all of the experience built up on the world’s circuits by the 488 Challenge and the 488 GTE.
+make=Ferrari
+model=488 Pista
+colour=Red
+year=2020
+transmission=Manual
+car_type=Coupe
+price=375000.50
+
+description=Superb comfort combined with intuitive technology and breathless good looks.
+make=Toyota
+model=Yaris
+colour=Red
+year=2020
+transmission=Automatic
+car_type=HatchBack
+price=25000.30
+
+description=The grade to get you into the hybrid spirit.
+make=Toyota
+model=Camry
+colour=Blue
+year=2020
+transmission=Automatic
+car_type=Sedan
+price=45000.15
+

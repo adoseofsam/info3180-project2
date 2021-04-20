@@ -5,7 +5,7 @@ from datetime import datetime
 class Cars(db.Model):
  
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    description = db.Column(db.String(20000))
+    description = db.Column(db.String(2000))
     make = db.Column(db.String(255))
     model = db.Column(db.String(255))
     colour = db.Column(db.String(255))
@@ -60,7 +60,7 @@ class Users(db.Model):
     name = db.Column(db.String(255))
     email = db.Column(db.String(255))
     location = db.Column(db.String(255))
-    biography = db.Column(db.String(255))
+    biography = db.Column(db.String(2000))
     photo = db.Column(db.String(255))
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 

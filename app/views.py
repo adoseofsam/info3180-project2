@@ -17,7 +17,6 @@ from werkzeug.security import check_password_hash
 ###
 # Routing for your application.
 ###
-
 @app.route('/')
 def home():
     """Render website's home page."""
@@ -62,11 +61,11 @@ Start of project2 bit.
 """
 #Accepts user information and saves it to the database.
 #HTTP Method: 'POST'
-@app.route('/api/register', methods=['POST', 'GET'])
+@app.route('/api/register', methods=['POST', 'GET']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def register():
 
+    #Instantiate form and get form data.
     form = RegistrationForm()
-
     if request.method == 'POST' and form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -78,10 +77,12 @@ def register():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+        #Save information to database.
         user = Users(username=username, password=password, name=name, email=email, location=location, biography=biography, photo=filename)
         db.session.add(user)
         db.session.commit()
 
+        #Format and return response message.
         new_user = {
             'message': 'User Registration Successful.',
             'username': username,
@@ -89,7 +90,7 @@ def register():
             'email': email,
             'location': location,
             'biography': biography,
-            'filename': filename
+            'photo': filename
         }
         return jsonify(new_user=new_user)
     """
@@ -102,23 +103,25 @@ def register():
 
 #Accepts login credentials as username and password.
 #HTTP Method: 'POST'
-@app.route('/api/auth/login', methods=['GET', 'POST'])
+@app.route('/api/auth/login', methods=['POST', 'GET']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def login():
 
     if current_user.is_authenticated:
         return redirect(url_for('secure_page'))
 
+    #Instantiate form and get form data.
     form = LoginForm()
-
     if request.method == 'POST' and form.validate_on_submit():
         if form.username.data:
             username = form.username.data
             password = form.password.data
 
+            #Query the database and login user if passwords match.
             user = Users.query.filter_by(username=username).first()
             if user is not None and check_password_hash(user.password, password):
                 login_user(user)
-            
+
+                #Format and return response message.
                 message = '{0} Successfully Logged In. User ID: {1}'.format(username, current_user.get_id())
                 login = {
                     'message': message,
@@ -134,7 +137,7 @@ def login():
 
 #Logout a user.
 #HTTP Method: 'POST'
-@app.route("/logout")
+@app.route("/logout" """, methods=['POST']""") #Method should be 'POST' ONLY
 @login_required
 def logout():
     # Logout the user and end the session
@@ -147,9 +150,33 @@ def logout():
 @app.route('/api/cars', methods=['GET', 'POST'])
 @login_required
 def cars():
+    """ - Uncomment this method to return all cars, otherwise it will return the form to add new car.
+    #If 'GET' then return all cars.
+    if request.method == 'GET':
+        crs = db.session.query(Cars).all()
+        cars = []
 
+        for cr in crs:
+            car = {
+                'id': cr.id,
+                'description': cr.description,
+                'make': cr.make,
+                'model': cr.model,
+                'colour': cr.colour,
+                'year': cr.year,
+                'transmission': cr.transmission,
+                'car_type': cr.car_type,
+                'price': cr.price,
+                'photo': cr.photo,
+                'user_id': cr.user_id
+                }
+            cars.append(car)
+
+        return jsonify(cars=cars)
+    """
+    #If 'POST' then add new car.
+    #Instantiate form and get form data.
     form = AddNewCarForm()
-
     if current_user.is_authenticated:
         if request.method == 'POST' and form.validate_on_submit():
             description = form.description.data
@@ -164,10 +191,14 @@ def cars():
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+            #Save information to database.
+            #Also
+            #I cast price to float because i encountered an error where json cannot serialize float so being lazy i did this.
             car = Cars(description=description, make=make, model=model, colour=colour, year=year, transmission=transmission, car_type=car_type, price=float(price), photo=filename, user_id=current_user.get_id())
             db.session.add(car)
             db.session.commit()
 
+            #Format and return response message.
             new_car = {
                 'message': 'New Car Added.',
                 'description': description,
@@ -178,7 +209,7 @@ def cars():
                 'transmission': transmission,
                 'car_type': car_type,
                 'price': price,
-                'filename': filename
+                'photo': filename
             }
             return jsonify(new_car=new_car)
         """
@@ -193,8 +224,13 @@ def cars():
 #HTTP Method: 'GET'
 @app.route('/api/cars/<car_id>', methods=['GET'])
 def get_car(car_id):
+
     if request.method == 'GET':
+
+        #Query the database.
         cr = Cars.query.filter_by(id=car_id).first()
+
+        #Format and return the data.
         car = {
             'id': cr.id,
             'description': cr.description,
@@ -213,26 +249,68 @@ def get_car(car_id):
 
 #Add car to Favourites for logged in user.
 #HTTP Method: 'POST'
-@app.route('/api/cars/<car_id>/favourite', methods=['POST'])
-def add_favourite():
-    if request.method == 'POST':
-        return 7
+@app.route('/api/cars/<car_id>/favourite', methods=['POST', 'GET']) #Method should be 'POST' ONLY
+@login_required
+def add_favourite(car_id):
+
+    if current_user.is_authenticated:
+        if request.method == 'GET':
+
+            #Save information to database.
+            user_id=current_user.get_id()
+            favourite = Favourites(car_id=car_id, user_id=user_id)
+            db.session.add(favourite)
+            db.session.commit()
+
+            #Format and return response message.
+            cr = Cars.query.filter_by(id=car_id).first()
+            user = Users.query.filter_by(id=user_id).first()
+            message = {
+                'message': '{0} Successfully Added {1} - {2} To Favourites.'.format(user.username, cr.make, cr.model)
+                }
+            return jsonify(message=message)
 
 
 #Search for cars by make or model.
 #HTTP Method: 'GET'
-@app.route('/api/search', methods=['GET'])
-def search():
+@app.route('/api/search/<search_term>', methods=['GET'])
+def search(search_term):
+
     if request.method == 'GET':
-        return 8
+
+        crs = db.session.query(Cars).all()
+        result = []
+
+        for cr in crs:
+            if search_term.lower() in cr.make.lower() or search_term.lower() in cr.model.lower():
+                car = {
+                    'id': cr.id,
+                    'description': cr.description,
+                    'make': cr.make,
+                    'model': cr.model,
+                    'colour': cr.colour,
+                    'year': cr.year,
+                    'transmission': cr.transmission,
+                    'car_type': cr.car_type,
+                    'price': cr.price,
+                    'photo': cr.photo,
+                    'user_id': cr.user_id
+                    }
+                result.append(car)
+        return jsonify(result)
 
 
 #Get Details of a user.
 #HTTP Method: 'GET'
 @app.route('/api/users/<user_id>', methods=['GET'])
 def get_user(user_id):
+
     if request.method == 'GET':
+
+        #Query the database.
         usr = Users.query.filter_by(id=user_id).first()
+
+        #Format and return the data.
         user = {
             'id': usr.id,
             'username': usr.username,
@@ -250,10 +328,33 @@ def get_user(user_id):
 #HTTP Method: 'GET'
 @app.route('/api/users/<user_id>/favourites', methods=['GET'])
 def get_favourites(user_id):
+
     if request.method == 'GET':
-        return 10
 
+        #Query the database.
+        favourites = Favourites.query.filter_by(user_id=user_id).all()
+        cars = []
 
+        #Format the data and populate the list.
+        for favourite in favourites:
+            cr = Cars.query.filter_by(id=favourite.car_id).first()
+            car = {
+                'id': cr.id,
+                'description': cr.description,
+                'make': cr.make,
+                'model': cr.model,
+                'colour': cr.colour,
+                'year': cr.year,
+                'transmission': cr.transmission,
+                'car_type': cr.car_type,
+                'price': cr.price,
+                'photo': cr.photo,
+                'user_id': cr.user_id
+                }
+            cars.append(car)
+
+        #Return the data.
+        return jsonify(cars=cars)
 
 
 # user_loader callback. This callback is used to reload the user object from

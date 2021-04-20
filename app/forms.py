@@ -22,7 +22,7 @@ class LoginForm(FlaskForm):
 
 
 class AddNewCarForm(FlaskForm):
-    description = StringField('Description', validators=[InputRequired()])
+    description = TextAreaField('Description', validators=[InputRequired()])
     make = StringField('Make', validators=[InputRequired()])
     model = StringField('Model', validators=[InputRequired()])
     colour = StringField('Colour', validators=[InputRequired()])
