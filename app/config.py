@@ -3,9 +3,8 @@ import os
 class Config(object):
     """Base Config Object"""
     DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'Som3$ec5etK*y'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://jhanelledouglas:monique@localhost/auto_sales'
-    
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'SecretKey'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://project2:password@localhost/project2'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = './app/static/uploads'
 
