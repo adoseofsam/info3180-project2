@@ -20,7 +20,7 @@
         <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
                 <li class="nav-item active"> <!-- replace logout with addCar when created-->
-                    <a class="nav-link" href="{{ url_for('logout') }}">Add Car</a>
+                    <a class="nav-link" href="{{ url_for('cars') }}">Add Car</a>
                 </li>
                 <li class="nav-item active"> <!-- replace logout with explore when created-->
                     <a class="nav-link" href="{{ url_for('logout') }}">Explore</a>
@@ -33,7 +33,7 @@
                 </li>
             {% else %}
                 <li class="nav-item active"> <!-- replace secure_page with register when created-->
-                    <a class="nav-link" href="{{ url_for('secure_page') }}">Register</a>
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('login') }}">Login</a>

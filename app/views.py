@@ -126,7 +126,7 @@ def login():
                 login = {
                     'message': message,
                 }
-                return jsonify(login=login)
+                return render_template('home.html')
     """        
     else:
         errors = form_errors(form)
@@ -217,7 +217,7 @@ def cars():
             errors = form_errors(form)
             return jsonify(errors=errors)
         """
-    return render_template("add_new_car_form.html", form=form)
+    return render_template("home.html", form=form)
 
 
 #Get Details of a specific car.
