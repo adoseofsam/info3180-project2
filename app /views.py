@@ -5,13 +5,16 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 import os
+import psycopg2
+import jwt
 from app import app, db, login_manager
-from flask import render_template, request, redirect, url_for, flash, send_from_directory, jsonify
+from flask import render_template,request, redirect, url_for, flash, send_from_directory, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from app.forms import RegistrationForm, LoginForm, AddNewCarForm
 from app.models import Cars, Users, Favourites
 from werkzeug.security import check_password_hash
+
 
 
 ###
@@ -61,11 +64,11 @@ Start of project2 bit.
 """
 #Accepts user information and saves it to the database.
 #HTTP Method: 'POST'
-@app.route('/api/register', methods=['POST', 'GET']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
+@app.route('/api/users/register', methods=['POST']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def register():
 
     #Instantiate form and get form data.
-    form = RegistrationForm()
+    registrationform = RegistrationForm()
     if request.method == 'POST' and form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -83,67 +86,103 @@ def register():
         db.session.commit()
 
         #Format and return response message.
-        new_user = {
-            'message': 'User Registration Successful.',
-            'username': username,
-            'name': name,
-            'email': email,
-            'location': location,
-            'biography': biography,
-            'photo': filename
+        # new_user = {
+        #     'message': 'User Registration Successful.',
+        #     'username': username,
+        #     'name': name,
+        #     'email': email,
+        #     'location': location,
+        #     'biography': biography,
+        #     'photo': filename
+        # }
+        # return jsonify(new_user=new_user)
+        successMsg = {
+            "message": "User Registration Successful!"
         }
-        return jsonify(new_user=new_user)
+        return jsonify(successMsg=successMsg)
+    else:
+        registerError = {
+            "errors": form_errors(registrationform)
+        }
+        return jsonify(registerError=registerError)
     """
     else:
         errors = form_errors(form)
         return jsonify(errors=errors)
     """
-    return render_template("registration_form.html", form=form)
+    # return render_template("registration_form.html", form=form)
 
 
 #Accepts login credentials as username and password.
 #HTTP Method: 'POST'
-@app.route('/api/auth/login', methods=['POST', 'GET']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
+@app.route('/api/auth/login', methods=['POST']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def login():
 
     if current_user.is_authenticated:
         return redirect(url_for('secure_page'))
 
     #Instantiate form and get form data.
-    form = LoginForm()
+    loginform = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
-        if form.username.data:
-            username = form.username.data
-            password = form.password.data
+        # if form.username.data:
+        username = form.username.data
+        password = form.password.data
 
-            #Query the database and login user if passwords match.
-            user = Users.query.filter_by(username=username).first()
-            if user is not None and check_password_hash(user.password, password):
-                login_user(user)
-
-                #Format and return response message.
-                message = '{0} Successfully Logged In. User ID: {1}'.format(username, current_user.get_id())
-                login = {
-                    'message': message,
+        #Query the database and login user if passwords match.
+        user = Users.query.filter_by(username=username).first()
+        if user is not None and check_password_hash(user.password, password):
+            login_user(user)
+            payload={
+                "username": user.username,
+                "password": user.password
+            }
+            encoded_jwt = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            successMsg = {
+            "token": encoded_jwt,
+            "message": "User successfully logged in.",
+            "user_id": user.id
+            }
+            return jsonify(successMsg=successMsg)
+        else:
+            loginError = {
+                "error": "Username or Password is incorrect."
                 }
-                return render_template('home.html')
-    """        
+            return jsonify(loginError=loginError)
     else:
-        errors = form_errors(form)
-        return jsonify(errors=errors)
-    """
-    return render_template("login_form.html", form=form)
+        loginErrors = {
+            "errors": form_errors(loginform)
+            }
+        return jsonify(loginError=loginError)
+            #Format and return response message.
+            # message = '{0} Successfully Logged In. User ID: {1}'.format(username, current_user.get_id())
+            # login = {
+            #     'message': message,
+            # }
+#             return render_template('home.html')
+# """        
+# else:
+#     errors = form_errors(form)
+#     return jsonify(errors=errors)
+# """
+# return render_template("login_form.html", form=form)
 
 
-#Logout a user.
-#HTTP Method: 'POST'
-@app.route("/logout" """, methods=['POST']""") #Method should be 'POST' ONLY
+# #Logout a user.
+# #HTTP Method: 'POST'
+# @app.route("/logout" """, methods=['POST']""") #Method should be 'POST' ONLY
+# @login_required
+# def logout():
+#     # Logout the user and end the session
+#     logout_user()
+#     return redirect(url_for('home'))
+@app.route('/api/auth/logout', methods=['GET'])
 @login_required
 def logout():
-    # Logout the user and end the session
     logout_user()
-    return redirect(url_for('home'))
-
+    successMsg = {
+        "message": "User is successfully logged out."
+    }
+    return jsonify(successMsg=successMsg)
 
 #Return all cars ['GET'] or add new cars ['POST'].
 #HTTP Method: 'GET' OR 'POST'

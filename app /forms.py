@@ -13,7 +13,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired(), Email()])
     location = StringField('Location', validators=[InputRequired()])
     biography = TextAreaField('Biography', validators=[InputRequired()])
-    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'Images only!'])])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg','Images only!'])])
 
 
 class LoginForm(FlaskForm):
@@ -30,4 +30,4 @@ class AddNewCarForm(FlaskForm):
     transmission = SelectField(u'Transmission', choices=[('Automatic'), ('Manual')])
     car_type = SelectField(u'Car Type', choices=[('Coupe'), ('Sedan'), ('HatchBack'), ('SUV'), ('Van'), ('MiniVan'), ('Truck')])
     price = StringField('Price', validators=[InputRequired()])
-    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'Images only!'])])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg','Images only!'])])
