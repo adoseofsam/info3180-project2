@@ -28,6 +28,9 @@ app.component('app-header', {
           <router-link class="nav-link" to="/addcar">Add Car<span class="sr-only">(current)</span></router-link>
         </li>
         <li class="nav-item active">
+          <router-link class="nav-link" to="/explore">Explore<span class="sr-only">(current)</span></router-link>
+        </li>
+        <li class="nav-item active">
           <router-link class="nav-link" to="/myprofile">My Profile<span class="sr-only">(current)</span></router-link>
         </li>
         <li class="nav-item active">
@@ -172,11 +175,11 @@ const loginForm = {
               <form id="loginForm"  @submit.prevent="loginUser" method="post">
                   <div class="form-group">
                       <label for="username"><b>Username</b></label>
-                      <input class="form-control" id="username" name="username" placeholder="Enter your username" type="text" value="">
+                      <input class="form-control" id="username" name="username" type="text" value="">
                   </div>
                   <div class="form-group">
                       <label for="password"><b>Password</b></label>
-                      <input class="form-control" id="password" name="password" type="password" placeholder="Enter your password" value="">
+                      <input class="form-control" id="password" name="password" type="password" value="">
                   </div>
                   <button type="submit" name="submit" class="btn btn-primary btn-block"><b>Login</b></button>
               </form>
@@ -253,6 +256,11 @@ const loginForm = {
     }
   }
 };
+
+//EXPLORE PAGE 
+
+
+
 const logout = {
   name:'logout', 
   template: `
@@ -304,8 +312,10 @@ const Home = {
           Great Price on the Vehicle You Want.</p>
           <div class="row" style="padding-right: 450px;">
               <div class="col-sm-12 text-center">
+              <div id="homeBtnsDiv">
                   <button id="btnRegister" class="btn btn-success" @click="$router.push('register')" type="submit" name="submit"><b>REGISTER</b></button>
                   <button id="btnLogin" class="btn btn-primary" @click="$router.push('login')" type="submit" name="submit"><b>LOGIN</b></button>
+                  </div>
                   </div>
               </div>
           </div>
@@ -313,7 +323,7 @@ const Home = {
               </div>
           </div>
       </div>
-      <img id= "redCar" style= "padding-bottom: 20px;" src="{{ url_for('static', filename='imgs/red_audi-unsplash.jpg') }}" alt="Red Car"/>
+      <div id="redCar" style= "padding-bottom: 20px;" src="../static/imgs/red_audi-unsplash.jpg" alt="Red Car"/>
   </div>
   `,
   data() {

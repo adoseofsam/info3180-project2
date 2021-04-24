@@ -261,6 +261,7 @@ def cars():
 #Get Details of a specific car.
 #HTTP Method: 'GET'
 @app.route('/api/cars/<car_id>', methods=['GET'])
+@login_required
 def get_car(car_id):
 
     if request.method == 'GET':
@@ -312,6 +313,7 @@ def add_favourite(car_id):
 #Search for cars by make or model.
 #HTTP Method: 'GET'
 @app.route('/api/search/<search_term>', methods=['GET'])
+@login_required
 def search(search_term):
 
     if request.method == 'GET':
@@ -341,6 +343,7 @@ def search(search_term):
 #Get Details of a user.
 #HTTP Method: 'GET'
 @app.route('/api/users/<user_id>', methods=['GET'])
+@login_required
 def get_user(user_id):
 
     if request.method == 'GET':
@@ -365,6 +368,7 @@ def get_user(user_id):
 #Get cars that a user has favourited.
 #HTTP Method: 'GET'
 @app.route('/api/users/<user_id>/favourites', methods=['GET'])
+@login_required
 def get_favourites(user_id):
 
     if request.method == 'GET':
