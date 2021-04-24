@@ -18,7 +18,7 @@ app.component('app-header', {
   name: 'AppHeader',
   template: `
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <a class="navbar-brand" href="/"><img id="icon" src="../static/images/photogram.png" alt="Logo"/> <b>Photogram</b></a>
+    <a class="navbar-brand" href="/"><img id="icon" src="../static/images/car-white.png" alt="Logo"/> <b>United Auto Sales</b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -241,6 +241,41 @@ const loginForm = {
         });
     }
   }
+};
+const logout = {
+  name:'logout', 
+  template: `
+  `,
+  mounted: function() {
+
+    let self = this;
+    if(current_userid==0) {
+      displayDangerMessage = true;
+      dangerMessage = 'You are already logged out!';
+      router.push("/")
+    } else {
+    fetch("/api/auth/logout", {
+        method: 'GET',
+        headers: {
+          "Content-type": "application/json"
+        },
+      })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (jsonResponse) {
+        console.log(jsonResponse);
+        successMessage = jsonResponse.successMessage.message;
+        displaySuccessMessage = true;
+        current_userid = 0;
+        router.push('/login')
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  },
+  methods: {}
 };
 
 const Home = {
