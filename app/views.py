@@ -20,16 +20,16 @@ from werkzeug.security import check_password_hash
 ###
 # Routing for your application.
 ###
-@app.route('/')
-def home():
-    """Render website's home page."""
-    return render_template('home.html')
+# @app.route('/')
+# def home():
+#     """Render website's home page."""
+#     return render_template('home.html')
 
 
-@app.route('/about/')
-def about():
-    """Render the website's about page."""
-    return render_template('about.html', name="Logan Halsall")
+# @app.route('/about/')
+# def about():
+#     """Render the website's about page."""
+#     return render_template('about.html', name="Logan Halsall")
 
 
 @app.route('/secure-page')
@@ -38,25 +38,25 @@ def secure_page():
     return render_template('secure_page.html')
 
 
-@app.route('/uploads/<filename>')
-def get_image(filename):
-    root_dir = os.getcwd()
-    return send_from_directory(os.path.join(root_dir, app.config['UPLOAD_FOLDER']), filename)
+# @app.route('/uploads/<filename>')
+# def get_image(filename):
+#     root_dir = os.getcwd()
+#     return send_from_directory(os.path.join(root_dir, app.config['UPLOAD_FOLDER']), filename)
 
 
-@app.route('/files')
-def files():
-    filenames = get_uploaded_images()
-    return render_template('files.html', filenames=filenames)
+# @app.route('/files')
+# def files():
+#     filenames = get_uploaded_images()
+#     return render_template('files.html', filenames=filenames)
 
 
-def get_uploaded_images():
-    rootdir = os.getcwd()
-    filenames = []
-    for subdir, dirs, files in os.walk(rootdir + app.config['UPLOAD_FOLDER'][1:]):
-        for file in files:
-            filenames.append(file)
-    return filenames
+# def get_uploaded_images():
+#     rootdir = os.getcwd()
+#     filenames = []
+#     for subdir, dirs, files in os.walk(rootdir + app.config['UPLOAD_FOLDER'][1:]):
+#         for file in files:
+#             filenames.append(file)
+#     return filenames
 
 
 """
@@ -66,17 +66,16 @@ Start of project2 bit.
 #HTTP Method: 'POST'
 @app.route('/api/users/register', methods=['POST']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def register():
-
     #Instantiate form and get form data.
     registrationform = RegistrationForm()
     if request.method == 'POST' and form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        name = form.name.data
-        email = form.email.data
-        location = form.location.data
-        biography = form.biography.data
-        photo = form.photo.data
+        username = request.form['username']
+        password = request.form['password']
+        name = request.form['name']
+        email = request.form['email']
+        location = request.form['location']
+        biography = request.form['biography']
+        photo = registrationForm.photo.data
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
@@ -118,8 +117,8 @@ def register():
 @app.route('/api/auth/login', methods=['POST']) #Method should be 'POST' ONLY but has 'GET' for now to allow render_template() to work
 def login():
 
-    if current_user.is_authenticated:
-        return redirect(url_for('secure_page'))
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('secure_page'))
 
     #Instantiate form and get form data.
     loginform = LoginForm()
@@ -132,7 +131,7 @@ def login():
         user = Users.query.filter_by(username=username).first()
         if user is not None and check_password_hash(user.password, password):
             login_user(user)
-            payload={
+            payload = {
                 "username": user.username,
                 "password": user.password
             }
@@ -146,7 +145,7 @@ def login():
         else:
             loginError = {
                 "error": "Username or Password is incorrect."
-                }
+            }
             return jsonify(loginError=loginError)
     else:
         loginErrors = {
@@ -407,6 +406,17 @@ def load_user(id):
 
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    """
+    Because we use HTML5 history mode in vue-router we need to configure our
+    web server to redirect all routes to index.html. Hence the additional route
+    "/<path:path".
+    Also we will render the initial webpage and then let VueJS take control.
+    """
+    return render_template('index.html')
+
 def form_errors(form):
     error_messages = []
     """Collects form errors"""
@@ -422,12 +432,12 @@ def form_errors(form):
 
 
 # Flash errors from the form if validation fails
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"Error in the %s field - %s" % (
-                getattr(form, field).label.text,
-                error), 'danger')
+# def flash_errors(form):
+#     for field, errors in form.errors.items():
+#         for error in errors:
+#             flash(u"Error in the %s field - %s" % (
+#                 getattr(form, field).label.text,
+#                 error), 'danger')
 
 
 ###
@@ -451,10 +461,10 @@ def add_header(response):
     return response
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-    """Custom 404 page."""
-    return render_template('404.html'), 404
+# @app.errorhandler(404)
+# def page_not_found(error):
+#     """Custom 404 page."""
+#     return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
