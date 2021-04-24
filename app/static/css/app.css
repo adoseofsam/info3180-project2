@@ -1,3 +1,6 @@
+html{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, "Noto Sans", sans-serif;
+}
 body {
     padding-top: 5rem;
     background-color: hsl(0, 0%, 96%);
@@ -11,4 +14,35 @@ body {
 #redCar{
     width: 450px;
     height: 550px;
+}
+.register-form{
+    background-color: #ffffff;
+    padding: 10px 100px 20px 30px;
+    width: 800px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-form{
+    width: 550px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: white;
+    margin: 40px;
+    padding: 40px;
+    border-radius: 40px;
+}
+.btn{
+    width: 150px;
+    margin-top: 10px;
+    background-color: #14b7a6;
+}
+#centerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#icon {
+    height: 25px;
+    width: auto;
 }

@@ -18,7 +18,7 @@ app.component('app-header', {
   name: 'AppHeader',
   template: `
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <a class="navbar-brand" href="/"><img id="icon" src="../static/images/car-white.png" alt="Logo"/> <b>United Auto Sales</b></a>
+    <a class="navbar-brand" href="/"><img id="icon" src="../static/imgs/car-white.png" alt="Logo"/> <b>United Auto Sales</b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -65,31 +65,42 @@ const registerForm = {
                       <li v-for="error in errors" class="news__item"> {{ error }}</li>
                   </ul> 
               </div>
-              <h1>Registration New User</h1>
+              <h1>Register New User</h1>
               <form id="registerForm" @submit.prevent="registerUser" method="post" enctype="multipart/form-data">
-                  <div class="form-group">
-                      <label for="username"><b>Username</b></label> <input class="form-control" id="username" name="username" type="text" value="">
+              <div class="row">
+              <div class="col-md-4">
+                <label for="username"><b>Username</b></label> <input class="form-control" id="username" name="username" type="text" value="">
+              </div>
+              <div class="col-md-4">
+                <label for="password"><b>Password</b></label> <input class="form-control" id="password" name="password" type="password" value="">
+              </div>
+              </div>
+                  <br>
+                  <div class="row">
+                  <div class="col-md-4">
+                      <label for="fullName"><b>Fullname</b></label> <input class="form-control" id="fullName" name="firstName" type="text" value="">
                   </div>
-                  <div class="form-group">
-                      <label for="password"><b>Password</b></label> <input class="form-control" id="password" name="password" type="password" value="">
-                  </div>
-                  <div class="form-group">
-                      <label for="firstName"><b>Fullname</b></label> <input class="form-control" id="fullName" name="firstName" type="text" value="">
-                  </div>
-                  <div class="form-group">
+                  <div class="col-md-4">
                       <label for="email"><b>Email</b></label> <input class="form-control" id="email" name="email" type="text" value="">
                   </div>
-                  <div class="form-group">
+                  </div>
+                  <br>
+                  <div class="row">
+                  <div class="col-8">
                       <label for="location"><b>Location</b></label> <input class="form-control" id="location" name="location" type="text" value="">
                   </div>
-                  <div class="form-group">
-                      <label for="biography"><b>Biography</b></label> <textarea class="form-control" id="biography" name="biography"></textarea>
+                  <br>
+                  <div class="col-sm-8">
+                  <label for="biography"><b>Biography</b></label> <textarea class="form-control" id="biography" name="biography"></textarea>
                   </div>
-                  <div class="form-group">
+                  </div>
+                  <br>
+                  <div class="row">
+                  <div class="col-md-4">
                       <label for="photo">Profile Photo</label>
                       <input class="form-control"  id="photo" name="photo" type="file">
                   </div>
-                
+                  </div>
                   <button type="submit" name="submit" class="btn btn-primary btn-block"><b>Register</b></button>
               </form>
         </div>
