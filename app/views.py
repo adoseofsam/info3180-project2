@@ -177,48 +177,47 @@ def cars():
     #If 'POST' then add new car.
     #Instantiate form and get form data.
     form = AddNewCarForm()
-        if current_user.is_authenticated:
-            if request.method == 'POST' and form.validate_on_submit():
-                description = form.description.data
-                make = form.make.data
-                model = form.model.data
-                colour = form.colour.data
-                year = form.year.data
-                transmission = form.transmission.data
-                car_type = form.car_type.data
-                price = form.price.data
-                photo = form.photo.data
-                filename = secure_filename(photo.filename)
-                photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if current_user.is_authenticated:
+        if request.method == 'POST' and form.validate_on_submit():
+            description = form.description.data
+            make = form.make.data
+            model = form.model.data
+            colour = form.colour.data
+            year = form.year.data
+            transmission = form.transmission.data
+            car_type = form.car_type.data
+            price = form.price.data
+            photo = form.photo.data
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                #Save information to database.
-                #Also
-                #I cast price to float because i encountered an error where json cannot serialize float so being lazy i did this.
-                car = Cars(description=description, make=make, model=model, colour=colour, year=year, transmission=transmission, car_type=car_type, price=float(price), photo=filename, user_id=current_user.get_id())
-                db.session.add(car)
-                db.session.commit()
+            #Save information to database.
+            #Also
+            #I cast price to float because i encountered an error where json cannot serialize float so being lazy i did this.
+            car = Cars(description=description, make=make, model=model, colour=colour, year=year, transmission=transmission, car_type=car_type, price=float(price), photo=filename, user_id=current_user.get_id())
+            db.session.add(car)
+            db.session.commit()
 
-                #Format and return response message.
-                new_car = {
-                    'message': 'New Car Added.',
-                    'description': description,
-                    'make': make,
-                    'model': model,
-                    'colour': colour,
-                    'year': year,
-                    'transmission': transmission,
-                    'car_type': car_type,
-                    'price': price,
-                    'photo': filename
-                }
-                return jsonify(new_car=new_car)
-            """
-            else:
-                errors = form_errors(form)
-                return jsonify(errors=errors)
-            """
-        return render_template("add_new_car_form.html", form=form)
-    return render_template("home.html")
+            #Format and return response message.
+            new_car = {
+                'message': 'New Car Added.',
+                'description': description,
+                'make': make,
+                'model': model,
+                'colour': colour,
+                'year': year,
+                'transmission': transmission,
+                'car_type': car_type,
+                'price': price,
+                'photo': filename
+            }
+            return jsonify(new_car=new_car)
+        """
+        else:
+            errors = form_errors(form)
+            return jsonify(errors=errors)
+        """
+    return render_template("add_new_car_form.html", form=form)
 
 
 #Get Details of a specific car.
