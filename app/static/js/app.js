@@ -14,7 +14,7 @@ const app = Vue.createApp({
 });
 
 
-Vue.component('app-header', {
+app.component('app-header', {
     template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <a class="navbar-brand" href="/"><img id="icon" src="../static/images/photogram.png" alt="Logo"/> <b>Photogram</b></a>
@@ -38,7 +38,7 @@ Vue.component('app-header', {
     `
 });
 
-Vue.component('app-footer', {
+app.component('app-footer', {
     template: `
     <footer>
         <br><br>
@@ -51,8 +51,9 @@ Vue.component('app-footer', {
 
 //BEGINNING OF FORMS
 
-const registerForm = Vue.component('register-form', {
-    template: `          
+const registerForm = {
+  name:'register-form', 
+    template: `         
     <div class="container">
         <div id="centerDiv">
             <div class="register-form center-block">
@@ -135,11 +136,12 @@ const registerForm = Vue.component('register-form', {
           });
       }
     }
-  });
+  };
 
 //LOGIN FORM
 
-  const loginForm = Vue.component('login-form', {
+  const loginForm = {
+    name:'login-form', 
     template: `
     <div class="container">
             
@@ -237,7 +239,7 @@ const registerForm = Vue.component('register-form', {
           });
       }
     }
-  });
+  };
 
   const Home = {
     name: 'Home',
