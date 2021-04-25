@@ -21,8 +21,11 @@ body {
     width: 450px;
     height: 550px;
 }
-h1{
+#loginhead{
     text-align: center;
+}
+#registerhead{
+    text-align: left;
 }
 #registerForm{
     background-color: #ffffff;

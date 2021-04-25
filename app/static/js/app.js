@@ -87,7 +87,7 @@ const registerForm = {
             <li v-for="error in errors" class="news__item"> {{ error }}</li>
           </ul> 
         </div>
-        <h1>Register New User</h1>
+        <h1 id="registerhead">Register New User</h1>
         <form id="registerForm" @submit.prevent="registerUser" method="post" enctype="multipart/form-data">
           <div class="row">
             <div class="col-md-4">
@@ -190,7 +190,7 @@ const loginForm = {
             <li v-for="error in errors" class="news__item"> {{ error }}</li>
           </ul> 
         </div>
-        <h1>Login in to your account</h1>
+        <h1 id="loginhead">Login in to your account</h1>
         <form id="loginForm"  @submit.prevent="loginUser" method="post">
           <div class="form-group">
             <label for="username"><b>Username</b></label>
@@ -276,17 +276,22 @@ const loginForm = {
 };
 
 //EXPLORE PAGE 
-const Explore ={
-  name: 'Explore',
-  template: `
-  <div>
-    <h2> Explore </h2>
-  </div>
-  `,data() {
-    return {}
-  }
-};
+const explore = {
+  name:'explore',
+  template: `          
+    <div class="ExpCars">
+        <div id = "message">
+            <p class="alert alert-success" v-if="success" id = "success"> {{ message }} </p>
+        </div>
+       <h1 id="explorehead">Explore</h1>
 
+    `,
+    data() {
+        return {
+        }
+      },
+  };
+  
 
 const logout = {
   name:'logout', 
@@ -373,6 +378,7 @@ const routes = [
   // Put other routes here
   {path: "/register", component: registerForm},
   {path: "/login", component: loginForm},
+  {path: "/explore", component: explore},
   // {path: "/addcar", component: }
   // This is a catch all route in case none of the above matches
   {path: "/logout", component: logout},
