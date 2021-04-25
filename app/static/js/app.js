@@ -277,12 +277,142 @@ const loginForm = {
   }
 };
 
+///////////////////////////////////////////////////ADD CAR FORM////////////////////////////////////////////////////////////////////
+const carForm = {
+  name:'carform',
+  template: ` 
+  <div id="centerDiv">
+  <div id = "carformDiv">
+    <div class="car-form center-block">
+      <div id = "message">
+        <p class="alert alert-success" v-if="success" id = "success"> {{ message }} </p>
+        <ul class="alert alert-danger" v-if="outcome === 'failure'" id = "errors">
+          <li v-for="error in errors" class="news__item"> {{ error }}</li>
+        </ul> 
+      </div>
+      <h1 id="carhead">Add New Car</h1>
+      <form id="uploadForm" @submit.prevent="uploadCar" method="post" enctype="multipart/form-data">
+       
+        <div class="row">
+          <div class="col-md-4">
+            <label for="make"><b>Make</b></label>
+            <input class="form-control" id="make" name="make" type="text" placeholder="Tesla" value="">
+          </div>
+
+          <div class="col-md-4">
+            <label for="model"><b>Model</b></label>
+            <input class="form-control" id="model" name="model" type="text" placeholder="Model S" value="">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label for="colour"><b>Colour</b></label> 
+            <input class="form-control" id="colour" name="colour" placeholder="Red" type="text" value="">
+          </div>
+          
+          <div class="col-md-4">
+            <label for="year"><b>Year</b></label>
+             <input class="form-control" id="year" name="year" placeholder="2018" type="text" value="">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label for="price"><b>Price</b></label> 
+            <input class="form-control" id="price" name="price" placeholder="62888" type="text" value="">
+          </div>
+
+          <div class="col-md-4">
+            <label for="cartype"><b>Car Type</b></label>
+             <input class="form-control" id="cartype" name="cartype" placeholder="SUV" type="text" value="">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-8">
+            <label for="transmission"><b>Transmission</b></label> 
+            <input class="form-control" placeholder="Automatic">
+          </div>
+
+          <br>
+
+          <div class="col-sm-8">
+            <label for="description"><b>Description</b></label>
+             <textarea class="form-control" id="description" name="description"></textarea>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label for="photo">PPhoto</label>
+            <input class="form-control"  id="photo" name="photo" type="file">
+          </div>
+        </div>
+
+        <button type="submit" name="submit" class="btn btn-success btn-block"><b>Save</b></button>
+      </form>
+    </div>
+  </div>
+</div>
+  `,
+  data() {
+    return {
+      outcome: '',
+      errors: []
+    }
+  },
+  methods: {
+    uploadCar() {
+
+      let uploadForm = document.getElementById('uploadForm');
+      let form_data = new FormData(uploadForm);
+      let self = this;
+      fetch("/api/cars", {
+        method: 'POST',
+        body: form_data,
+        headers: {
+          'X-CSRFToken': token
+        },
+        credentials: 'same-origin'
+      })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (jsonResponse) {
+          // display a success message
+          console.log(jsonResponse);
+          if(jsonResponse.hasOwnProperty('errordata')) {
+            self.errors = jsonResponse.errordata.errors;
+            self.outcome = 'failure';
+          } else {
+            successMsg = jsonResponse.successMsg.message;
+            displaySuccessMsg = true;
+            router.go(-1)
+            router.push('explore');
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }
+};
+
 ///////////////////////////////////////////////////EXPLORE PAGE/////////////////////////////////////////////////////////////////// 
 const explore = {
   name: 'explore',
   template: `
-      <div class="container maincontainer">
-          <div id="displayexplore">
+      <div class="container ">
+          <div id="explorePage">
               <h1>Explore</h1>
               <div id = "temp" class="form-inline d-flex justify-content-center">
             <div class="form-group mx-sm-3 mb-2">
@@ -448,6 +578,7 @@ const routes = [
   {path: "/register", component: registerForm},
   {path: "/login", component: loginForm},
   {path: "/explore", component: explore},
+  {path: "/addcar", component: carForm},
   // {path: "/addcar", component: }
   // This is a catch all route in case none of the above matches
   {path: "/logout", component: logout},

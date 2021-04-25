@@ -24,8 +24,9 @@ body {
 #loginhead{
     text-align: center;
 }
-#registerhead{
+#registerhead,#carhead{
     text-align: left;
+    font-weight: bold;
 }
 #temp{
     background-color: #ffffff;
@@ -40,7 +41,7 @@ body {
 
 }
 
-#registerForm{
+#registerForm,#uploadForm{
     background-color: #ffffff;
     padding: 10px 100px 20px 30px;
     width: 800px;

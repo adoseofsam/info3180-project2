@@ -27,7 +27,7 @@ class AddNewCarForm(FlaskForm):
     model = StringField('Model', validators=[InputRequired()])
     colour = StringField('Colour', validators=[InputRequired()])
     year = StringField('Year', validators=[InputRequired()])
-    transmission = SelectField(u'Transmission', choices=[('Automatic'), ('Manual')])
+    transmission = SelectField('Transmission', choices=[('Automatic'), ('Manual')])
     car_type = SelectField(u'Car Type', choices=[('Coupe'), ('Sedan'), ('HatchBack'), ('SUV'), ('Van'), ('MiniVan'), ('Truck')])
     price = StringField('Price', validators=[InputRequired()])
     photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg','Images only!'])])
