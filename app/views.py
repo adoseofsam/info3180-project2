@@ -189,7 +189,7 @@ def logout():
 @app.route('/api/cars', methods=['GET', 'POST'])
 @login_required
 def cars():
-    """ - Uncomment this method to return all cars, otherwise it will return the form to add new car.
+    #- Uncomment this method to return all cars, otherwise it will return the form to add new car.
     #If 'GET' then return all cars.
     if request.method == 'GET':
         crs = db.session.query(Cars).all()
@@ -212,7 +212,7 @@ def cars():
             cars.append(car)
 
         return jsonify(cars=cars)
-    """
+    
     #If 'POST' then add new car.
     #Instantiate form and get form data.
     form = AddNewCarForm()
@@ -256,7 +256,7 @@ def cars():
             errors = form_errors(form)
             return jsonify(errors=errors)
         """
-    return render_template("add_new_car_form.html", form=form)
+    return jsonify(new_car=new_car)
 
 
 #Get Details of a specific car.

@@ -73,7 +73,9 @@ app.component('app-footer', {
   `
 });
 
-//BEGINNING OF FORMS
+///////////////////////////////////////////////////////////BEGINNING OF FORMS/////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////REGISTRATION FORM/////////////////////////////////////////////////////////////
 
 const registerForm = {
   name:'register-form', 
@@ -175,7 +177,7 @@ const registerForm = {
   }
 };
 
-//LOGIN FORM
+////////////////////////////////////////////LOGIN FORM//////////////////////////////////////////////////////////
 
 const loginForm = {
   name:'login-form', 
@@ -275,24 +277,89 @@ const loginForm = {
   }
 };
 
-//EXPLORE PAGE 
+///////////////////////////////////////////////////EXPLORE PAGE/////////////////////////////////////////////////////////////////// 
 const explore = {
-  name:'explore',
-  template: `          
-    <div class="ExpCars">
-        <div id = "message">
-            <p class="alert alert-success" v-if="success" id = "success"> {{ message }} </p>
+  name: 'explore',
+  template: `
+      <div class="container maincontainer">
+          <div id="displayexplore">
+              <h1>Explore</h1>
+              <div id = "temp" class="form-inline d-flex justify-content-center">
+            <div class="form-group mx-sm-3 mb-2">
+            <label class="sr-only" for="search">Search</label>
+            <div>
+            <label for="make"><b>Make</b></label>
+            <input type="make" name="make" v-model="makeTerm"id="makesearch" class="form-control mb-2 mr-sm-2"/>
+            </div>
+            <div>
+            <label for="model"><b>Model</b></label>
+            <input type="model" name="model" v-model="modelTerm"id="modelsearch" class="form-control mb-2 mr-sm-2"/>
+            
+            <button type ="submit" class="btn btn-primary mb-2" @click="search">Search</button>
         </div>
-       <h1 id="explorehead">Explore</h1>
+        </div>
+              <div class="carslist">
+              <div v-for="car in cars">
+                  <div class="card" style="width: 18rem;">
+                      <img class="card-img-top favcar"  :src="car.photo">
+                      <div class="card-body">
+                          <div class="name-model-price">
 
-    `,
-    data() {
-        return {
-        }
-      },
-  };
+                              <div class="name-model">
+                                  <span  class="car-name">{{car.year.concat(" ",car.make)}}</span>
+                                  <span class="graytext">{{car.model}}</span>
+                              </div>
+
+                              <a href="#" class="btn btn-success card-price-btn">
+                                  <img class="icons" src='/static/imgs/price-tags.png'>
+                                  <span><span>$</span>{{car.price}}</span>
+                              </a>
+
+                          </div>
+                          <a :href="car.id" class="btn btn-primary card-view-btn" @click="get_car">View more details</a>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </div>
+      </div>
+  `,
+  created() {
+      let self = this;
+      fetch("/api/cars", {
+          method: 'GET',
+          headers: {
+              'X-CSRFToken': token,
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          credentials: 'same-origin'        
+      })
+      .then(function(response) {
+          return response.json();
+      })
+      .then(function(jsonResponse) {
+          self.cars = jsonResponse.data;
+          console.log(jsonResponse.data)
+      })
+      .catch(function(error) {
+          console.log(error);
+      });
+  },
+  data() {
+      return {
+          cars : []
+      }
+  },
+  methods: {
+      get_cars: function(event) {
+          event.preventDefault();
+          alert(event.target.getAttribute("href"));
+          
+      }
+  }
+};
   
-
+//////////////////////////////////////////LOGOUT COMPONENT///////////////////////////////////////////
 const logout = {
   name:'logout', 
   template: `
@@ -329,6 +396,7 @@ const logout = {
   methods: {}
 };
 
+///////////////////////////////////////////////////////HOME COMPONENT//////////////////////////////////////////////////////////
 const Home = {
   name: 'Home',
   template: `
@@ -360,6 +428,7 @@ const Home = {
   }
 };
 
+////////////////////////////////////////////////////NOT FOUND/////////////////////////////////////////////////////
 const NotFound = {
   name: 'NotFound',
   template: `
@@ -372,7 +441,7 @@ const NotFound = {
   }
 };
 
-// Define Routes
+//////////////////////////////////////////////////////Routes//////////////////////////////////////////////////////
 const routes = [
   { path: "/", component: Home },
   // Put other routes here
