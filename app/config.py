@@ -4,7 +4,7 @@ class Config(object):
     """Base Config Object"""
     DEBUG = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'SecretKey'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://project2:password@localhost/project2'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://sam:password@localhost/project2'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = './app/static/uploads'
 

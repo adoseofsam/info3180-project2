@@ -21,7 +21,10 @@ body {
     width: 450px;
     height: 550px;
 }
-.register-form{
+h1{
+    text-align: center;
+}
+#registerForm{
     background-color: #ffffff;
     padding: 10px 100px 20px 30px;
     width: 800px;
@@ -30,7 +33,7 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-.login-form{
+#loginForm{
     width: 550px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     background-color: white;
