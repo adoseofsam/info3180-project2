@@ -9,11 +9,11 @@ Start of project2 bit.
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
-    name = StringField('Name', validators=[InputRequired()])
+    fullName = StringField('FullName', validators=[InputRequired()])
     email = StringField('Email', validators=[InputRequired(), Email()])
     location = StringField('Location', validators=[InputRequired()])
     biography = TextAreaField('Biography', validators=[InputRequired()])
-    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg','Images only!'])])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')])
 
 
 class LoginForm(FlaskForm):

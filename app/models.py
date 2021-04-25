@@ -57,17 +57,17 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    name = db.Column(db.String(255))
+    fullName = db.Column(db.String(255))
     email = db.Column(db.String(255))
     location = db.Column(db.String(255))
     biography = db.Column(db.String(2000))
     photo = db.Column(db.String(255))
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, username, password, name, email, location, biography, photo):
+    def __init__(self, username, password, fullName, email, location, biography, photo):
         self.username = username
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
-        self.name = name
+        self.fullName = fullName
         self.email = email
         self.location = location
         self.biography = biography
@@ -76,7 +76,8 @@ class Users(db.Model):
     def to_json(self):
         return {
             "username": self.username,
-            "name": self.name,
+            "fullName": self.fullName,
+            "password": self.password,
             "email": self.email,
             "location": self.location,
             "biography": self.biography,

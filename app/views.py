@@ -68,22 +68,23 @@ Start of project2 bit.
 def register():
     #Instantiate form and get form data.
     registrationform = RegistrationForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and registrationform.validate_on_submit()==True:
         username = request.form['username']
         password = request.form['password']
-        name = request.form['name']
+        fullName = registrationform.fullName.data
         email = request.form['email']
         location = request.form['location']
         biography = request.form['biography']
-        photo = registrationForm.photo.data
+        photo = registrationform.photo.data
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         #Save information to database.
-        user = Users(username=username, password=password, name=name, email=email, location=location, biography=biography, photo=filename)
+        user = Users(username=username, password=password, fullName=fullName, email=email, location=location, biography=biography, photo=filename)
         db.session.add(user)
         db.session.commit()
 
+        '''
         #Format and return response message.
         # new_user = {
         #     'message': 'User Registration Successful.',
@@ -94,7 +95,7 @@ def register():
         #     'biography': biography,
         #     'photo': filename
         # }
-        # return jsonify(new_user=new_user)
+        # return jsonify(new_user=new_user)'''
         successMsg = {
             "message": "User Registration Successful!"
         }
@@ -122,10 +123,10 @@ def login():
 
     #Instantiate form and get form data.
     loginform = LoginForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and loginform.validate_on_submit()==True:
         # if form.username.data:
-        username = form.username.data
-        password = form.password.data
+        username = loginform.username.data
+        password = loginform.password.data
 
         #Query the database and login user if passwords match.
         user = Users.query.filter_by(username=username).first()
