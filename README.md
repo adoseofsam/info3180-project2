@@ -5,7 +5,7 @@ available cars and be able to view some more information on those cars.
 Users can also add a car to their favourites so they can quickly get back to
 it.
 
-#HEROKU-DEPLOYMENT:
+# HEROKU-DEPLOYMENT:
 https://unitedauto1.herokuapp.com/
 
 ## DB Setup
