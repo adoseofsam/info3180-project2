@@ -10,6 +10,7 @@ __pycache__
 .venv/
 venv/
 
+
 # nodejs
 node_modules
 
