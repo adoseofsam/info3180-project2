@@ -686,27 +686,27 @@ const AddCar = {
             <div class="mt-sm-1 mb-sm-1 d-flex flex-area1">
                 <div>
                     <label class="" for="make">Make</label><br>
-                    <input type="text" class="form-control form-field" name="make" required>
+                    <input type="text" class="form-control form-field" placeholder="Tesla" name="make" required>
                 </div>
                 <div>
                     <label class="" for="model">Model</label><br>
-                    <input type="text" class="form-control form-field" name="model" required>
+                    <input type="text" class="form-control form-field" placeholder="Model S"name="model" required>
                 </div>
             </div>
             <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
                 <div>
                     <label class="" for="colour">Colour</label><br>
-                    <input type="text" class="form-control form-field" name="colour" required>
+                    <input type="text" class="form-control form-field" placeholder="Red" name="colour" required>
                 </div>
                 <div>
                     <label class="" for="year">Year</label><br>
-                    <input type="text" class="form-control form-field" name="year" required>
+                    <input type="text" class="form-control form-field" placeholder= "2018" name="year" required>
                 </div>
             </div>
             <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
                 <div>
                     <label class="" for="price">Price</label><br>
-                    <input type="number" class="form-control form-field" name="price" required>
+                    <input type="number" class="form-control form-field" placeholder="62888" name="price" required>
                 </div>
                 <div>
                     <label class="" for="car_type">Car Type</label><br>
