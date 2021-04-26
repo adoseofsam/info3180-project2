@@ -804,5 +804,4 @@ const router = VueRouter.createRouter({
 });
 
 app.use(router);
-
 app.mount('#app');
