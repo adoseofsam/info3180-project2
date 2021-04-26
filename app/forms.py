@@ -1,4 +1,3 @@
-  
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, TextAreaField, PasswordField, SelectField
@@ -12,10 +11,8 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     location = StringField('Location', validators=[DataRequired()])
     biography = TextAreaField('Biography', validators=[DataRequired()])
-    photo = FileField('Upload Photo', validators=[
-        FileRequired(),
-        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
-    ])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg','jpeg', 'png', 'Images only!'])])
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
@@ -34,7 +31,5 @@ class CarForm(FlaskForm):
     car_type = StringField('Car Type', validators=[DataRequired()])
     transmission = StringField('Transmission', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    photo = FileField('Photo', validators=[
-        FileRequired(),
-        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
-    ])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg','jpeg', 'png', 'Images only!'])])
+

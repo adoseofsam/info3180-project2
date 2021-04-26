@@ -145,9 +145,9 @@ const Register = {
                     <label class="" for="biography">Biography</label><br>
                     <textarea name="biography" class="form-control" required></textarea><br>
                 </div>
-                <div class="">
+                <div class="form-group">
                     <label class="" for="photo">Upload Photo</label><br>
-                    <input type="file" class="form-control form-field" name="photo" accept=".jpeg, .jpg, .png">
+                    <input type="file" class="form-control" name="photo" accept=".jpeg, .jpg, .png">
                 </div>
                 <button type="submit" name="submit" class="btn  text-white mt-sm-3 mb-sm-1 Dahalia-Rodje-color">Register</button>
             </form>
