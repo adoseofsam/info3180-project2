@@ -309,7 +309,9 @@ label{
   -webkit-transform: translate(-50%, -50%); 
 
 }
-
+.once_loggedIn{
+  padding-left: 150px;
+}
 .register {
   width: 830px;
   padding-left: 230px;

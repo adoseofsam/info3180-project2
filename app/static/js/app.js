@@ -19,7 +19,7 @@ app.component('app-header', {
     
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         
-        <ul class="navbar-nav mr-auto" v-if="isLoggedIn()">
+        <ul class="navbar-nav once_loggedIn mr-auto" v-if="isLoggedIn()">
             <li class="nav-item active">
                 <router-link class="nav-link" to="/cars/new">Add Car <span class="sr-only">(current)</span></router-link>
             </li>
