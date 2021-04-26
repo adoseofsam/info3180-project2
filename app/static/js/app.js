@@ -1,3 +1,5 @@
+/* Add your Application JavaScript */
+// Instantiate our main Vue Instance
 const app = Vue.createApp({
     data() {
         return {
@@ -6,7 +8,6 @@ const app = Vue.createApp({
     }
 });
 
-////////////////////////////////////////////////////////////////APP HEADER//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.component('app-header', {
     name: 'AppHeader',
     template: `
@@ -63,7 +64,6 @@ app.component('app-header', {
     }
 });
 
-////////////////////////////////////////////////////APP FOOTER//////////////////////////////////////////////////////////////////////////////////////
 app.component('app-footer', {
     name: 'AppFooter',
     template: `
@@ -79,7 +79,7 @@ app.component('app-footer', {
         }
     }
 });
-////////////////////////////////////////////////////////////////HOME////////////////////////////////////////////////////////////////
+
 const Home = {
     name: 'Home',
     template: `
@@ -110,9 +110,6 @@ const Home = {
     },
 };
 
-////////////////////////////////////////////////////////////////BEGINNING OF FORMS////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////REGISTRATION FORM////////////////////////////////////////////////////////////////
 const Register = {
     name: 'Register',
     template: `
@@ -194,7 +191,6 @@ const Register = {
     }
 };
 
-////////////////////////////////////////////////////////////////LOGIN  FORM////////////////////////////////////////////////////////////////
 const Login = {
     name: 'Login',
     template: `
@@ -257,124 +253,6 @@ const Login = {
     }
 };
 
-////////////////////////////////////////////////////////////////CAR FORM////////////////////////////////////////////////////////////////
-const AddCar = {
-    name: 'AddCar',
-    template: `
-    <div class="container maincontainer">
-    <div class="m-4 ">
-        <h1 class="mb-4" id="addnew">Add New Car</h1>
-        <form method="POST" class="form" action="" id="car-form" @submit.prevent="addCar()">
-            <div class="mt-sm-1 mb-sm-1 d-flex flex-area1">
-                <div>
-                    <label class="" for="make">Make</label><br>
-                    <input type="text" class="form-control form-field" name="make" required>
-                </div>
-                <div>
-                    <label class="" for="model">Model</label><br>
-                    <input type="text" class="form-control form-field" name="model" required>
-                </div>
-            </div>
-            <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
-                <div>
-                    <label class="" for="colour">Colour</label><br>
-                    <input type="text" class="form-control form-field" name="colour" required>
-                </div>
-                <div>
-                    <label class="" for="year">Year</label><br>
-                    <input type="text" class="form-control form-field" name="year" required>
-                </div>
-            </div>
-            <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
-                <div>
-                    <label class="" for="price">Price</label><br>
-                    <input type="number" class="form-control form-field" name="price" required>
-                </div>
-                <div>
-                    <label class="" for="car_type">Car Type</label><br>
-                    <select name="car_type" class="form-control form-field" required>
-                        <option value="SUV">SUV</option>
-                        <option value="Truck">Truck</option>
-                        <option value="Sedan">Sedan</option>
-                        <option value="Van">Van</option>
-                        <option value="Coupe">Coupe</option>
-                        <option value="Wagon">Wagon</option>
-                        <option value="Convertible">Convertible</option>
-                        <option value="Sports Car">Sports Car</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Crossover">Crossover</option>
-                        <option value="Luxury Car">Luxury Car</option>
-                        <option value="Hybrid/Electric">Hybrid/Electric</option>
-                        <option value="Super Car">Super Car</option>
-                        <option value="Hyper Car">Hyper Car</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mt-sm-3 mb-sm-1">
-                <label class="" for="transmission">Transmission</label><br>
-                <select name="transmission" class="form-control form-field" required>
-                    <option value="Automatic">Automatic</option>
-                    <option value="Manual">Manual</option>
-                </select>
-            </div>
-            <div class="mt-sm-3 mb-sm-1">
-                <label class="" for="description">Description</label><br>
-                <textarea name="description" class="form-control" rows="4" required></textarea><br>
-            </div>
-            <div class="">
-                <label class="" for="photo">Upload Photo</label><br>
-                <input type="file" class="form-control form-field" name="photo" accept=".jpeg, .jpg, .png" required>
-            </div>
-            <button type="submit" name="submit" class="btn Dahalia-Rodje-color text-white mt-sm-3 mb-sm-1">Save</button>
-        </form>
-    </div>
-    </div>
-    `,
-    data() {
-        return {}
-    }, 
-    methods: {
-        addCar: function() {
-
-            let self = this;
-            let carForm = document.getElementById('car-form');
-            let form_data = new FormData(carForm);
-
-            fetch("/api/cars", {
-                method: 'POST',
-                body: form_data,
-                headers: {
-                    'X-CSRFToken': token,
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                credentials: 'same-origin'        
-            })
-            .then(function(response) {
-                console.log(response);
-                return response.json();
-            })
-            .then(function(jsonResponse) {
-                if(jsonResponse.data){
-                    router.push('/explore');
-                    swal({title: "Add Car",text: jsonResponse.message,icon: "success",button: "Proceed"});
-                }else{
-                    swal({title: "Add Car",text: jsonResponse.errors[0],icon: "error",button: "Try Again"});
-                }
-                
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-    
-        }
-        
-    }
-};
-
-
-////////////////////////////////////////////////////////////////END OF FORMS////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////LOGOUT COMPONENT////////////////////////////////////////////////////////////////
 const Logout = {
     name: 'Logout',
     template: `
@@ -404,7 +282,6 @@ const Logout = {
     }
 };
 
-////////////////////////////////////////////////////////////////EXPLORE COMPONENT////////////////////////////////////////////////////////////////
 const Explore = {
     name: 'Explore',
     template: `
@@ -529,9 +406,8 @@ const Explore = {
     }
 };
 
-////////////////////////////////////////////////////////////////USER PROFILE////////////////////////////////////////////////////////////////
-const userProfile = {
-    name: 'userProfile',
+const Profile = {
+    name: 'Profile',
     template: `
         <div class="container maincontainer">
             <div id="displayfav">
@@ -640,10 +516,8 @@ const userProfile = {
     }
 };
 
-
-////////////////////////////////////////////////////////////////CAR COMPONENT////////////////////////////////////////////////////////////////
-const CarInfo = {
-    name: 'CarInfo',
+const CarDetails = {
+    name: 'CarDetails',
     template: `
         <div class="container maincontainer">
             <div id="display-car-details" v-if="details[0]">
@@ -790,6 +664,119 @@ const CarInfo = {
     }
 };
 
+const AddCar = {
+    name: 'AddCar',
+    template: `
+    <div class="container maincontainer">
+    <div class="m-4 ">
+        <h1 class="mb-4" id="addnew">Add New Car</h1>
+        <form method="POST" class="form" action="" id="car-form" @submit.prevent="addCar()">
+            <div class="mt-sm-1 mb-sm-1 d-flex flex-area1">
+                <div>
+                    <label class="" for="make">Make</label><br>
+                    <input type="text" class="form-control form-field" name="make" required>
+                </div>
+                <div>
+                    <label class="" for="model">Model</label><br>
+                    <input type="text" class="form-control form-field" name="model" required>
+                </div>
+            </div>
+            <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
+                <div>
+                    <label class="" for="colour">Colour</label><br>
+                    <input type="text" class="form-control form-field" name="colour" required>
+                </div>
+                <div>
+                    <label class="" for="year">Year</label><br>
+                    <input type="text" class="form-control form-field" name="year" required>
+                </div>
+            </div>
+            <div class="mt-sm-3 mb-sm-1 d-flex flex-area1">
+                <div>
+                    <label class="" for="price">Price</label><br>
+                    <input type="number" class="form-control form-field" name="price" required>
+                </div>
+                <div>
+                    <label class="" for="car_type">Car Type</label><br>
+                    <select name="car_type" class="form-control form-field" required>
+                        <option value="SUV">SUV</option>
+                        <option value="Truck">Truck</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Van">Van</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Wagon">Wagon</option>
+                        <option value="Convertible">Convertible</option>
+                        <option value="Sports Car">Sports Car</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Crossover">Crossover</option>
+                        <option value="Luxury Car">Luxury Car</option>
+                        <option value="Hybrid/Electric">Hybrid/Electric</option>
+                        <option value="Super Car">Super Car</option>
+                        <option value="Hyper Car">Hyper Car</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-sm-3 mb-sm-1">
+                <label class="" for="transmission">Transmission</label><br>
+                <select name="transmission" class="form-control form-field" required>
+                    <option value="Automatic">Automatic</option>
+                    <option value="Manual">Manual</option>
+                </select>
+            </div>
+            <div class="mt-sm-3 mb-sm-1">
+                <label class="" for="description">Description</label><br>
+                <textarea name="description" class="form-control" rows="4" required></textarea><br>
+            </div>
+            <div class="">
+                <label class="" for="photo">Upload Photo</label><br>
+                <input type="file" class="form-control form-field" name="photo" accept=".jpeg, .jpg, .png" required>
+            </div>
+            <button type="submit" name="submit" class="btn Dahalia-Rodje-color text-white mt-sm-3 mb-sm-1">Save</button>
+        </form>
+    </div>
+    </div>
+    `,
+    data() {
+        return {}
+    }, 
+    methods: {
+        addCar: function() {
+
+            let self = this;
+            let carForm = document.getElementById('car-form');
+            let form_data = new FormData(carForm);
+
+            fetch("/api/cars", {
+                method: 'POST',
+                body: form_data,
+                headers: {
+                    'X-CSRFToken': token,
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                credentials: 'same-origin'        
+            })
+            .then(function(response) {
+                console.log(response);
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                if(jsonResponse.data){
+                    router.push('/explore');
+                    swal({title: "Add Car",text: jsonResponse.message,icon: "success",button: "Proceed"});
+                }else{
+                    swal({title: "Add Car",text: jsonResponse.errors[0],icon: "error",button: "Try Again"});
+                }
+                
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    
+        }
+        
+    }
+};
+
 const NotFound = {
     name: 'NotFound',
     template: `
@@ -802,17 +789,17 @@ const NotFound = {
     }
 };
 
-
-////////////////////////////////////////////////////////////////Routes////////////////////////////////////////////////////////////////
+// Define Routes
 const routes = [
     { path: "/", component: Home },
     { path: "/register", component: Register },
     { path: "/login", component: Login },
     { path: "/logout", component: Logout },
     { path: "/explore", component: Explore },
-    { path: "/users/:id",name:"users", component: userProfile },
+    { path: "/users/:id",name:"users", component: Profile },
     { path: "/cars/new", component: AddCar },
-    { path: "/cars/:id",name:"details", component: CarInfo},
+    { path: "/cars/:id",name:"details", component: CarDetails},
+
     // This is a catch all route in case none of the above matches
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ];
