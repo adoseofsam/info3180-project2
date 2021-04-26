@@ -1,33 +1,40 @@
+  
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SelectField
-from wtforms.validators import InputRequired, Email, Optional
 from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, TextAreaField, PasswordField, SelectField
+from wtforms.validators import DataRequired, InputRequired, Email
 
-"""
-Start of project2 bit.
-"""
-class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired()])
-    password = PasswordField('Password', validators=[InputRequired()])
-    fullName = StringField('FullName', validators=[InputRequired()])
-    email = StringField('Email', validators=[InputRequired(), Email()])
-    location = StringField('Location', validators=[InputRequired()])
-    biography = TextAreaField('Biography', validators=[InputRequired()])
-    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')])
 
+class RegisterForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = StringField('Password', validators=[DataRequired()])
+    fullname = StringField('Full Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    location = StringField('Location', validators=[DataRequired()])
+    biography = TextAreaField('Biography', validators=[DataRequired()])
+    photo = FileField('Upload Photo', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+    ])
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
 
+class ExploreForm(FlaskForm):
+    make = StringField('Make', validators=[])
+    model = StringField('Model', validators=[])
 
-class AddNewCarForm(FlaskForm):
-    description = TextAreaField('Description', validators=[InputRequired()])
-    make = StringField('Make', validators=[InputRequired()])
-    model = StringField('Model', validators=[InputRequired()])
-    colour = StringField('Colour', validators=[InputRequired()])
-    year = StringField('Year', validators=[InputRequired()])
-    transmission = SelectField('Transmission', choices=[('Automatic'), ('Manual')])
-    car_type = SelectField(u'Car Type', choices=[('Coupe'), ('Sedan'), ('HatchBack'), ('SUV'), ('Van'), ('MiniVan'), ('Truck')])
-    price = StringField('Price', validators=[InputRequired()])
-    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg','Images only!'])])
+class CarForm(FlaskForm):
+    make = StringField('Make', validators=[DataRequired()])
+    model = StringField('Model', validators=[DataRequired()])
+    colour = StringField('Colour', validators=[DataRequired()])
+    year = StringField('Year', validators=[DataRequired()])
+    price = StringField('Price', validators=[DataRequired()])
+    car_type = StringField('Car Type', validators=[DataRequired()])
+    transmission = StringField('Transmission', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    photo = FileField('Photo', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+    ])
