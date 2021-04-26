@@ -311,7 +311,11 @@ label{
 }
 
 .register {
-  width: 570px;
+  width: 830px;
+  padding-left: 230;
+}
+.add_car{
+  padding-left: 210px;
 }
 
 .flex-area1 {

@@ -3,12 +3,12 @@ from werkzeug.security import generate_password_hash
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100))
-    password = db.Column(db.String(300))
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(50))
     name = db.Column(db.String(50))
     email = db.Column(db.String(50))
-    location = db.Column(db.String(250))
-    biography = db.Column(db.String(2500))
+    location = db.Column(db.String(50))
+    biography = db.Column(db.String(300))
     photo = db.Column(db.String(100))
     date = db.Column(db.DateTime)
 
@@ -44,15 +44,15 @@ class Users(db.Model):
 
 class Cars(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(1000))
-    make = db.Column(db.String(100))
-    model = db.Column(db.String(100))
-    colour = db.Column(db.String(50))
+    description = db.Column(db.String(400))
+    make = db.Column(db.String(50))
+    model = db.Column(db.String(50))
+    colour = db.Column(db.String(20))
     year = db.Column(db.String(10))
-    transmission = db.Column(db.String(100))
-    car_type = db.Column(db.String(100))
+    transmission = db.Column(db.String(50))
+    car_type = db.Column(db.String(50))
     price = db.Column(db.Float)
-    photo = db.Column(db.String(100))
+    photo = db.Column(db.String(200))
     userid= db.Column(db.Integer)
 
     def __init__(self,description,make,model,colour,year,transmission,car_type,price,photo,userid):

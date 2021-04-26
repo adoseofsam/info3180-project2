@@ -668,7 +668,7 @@ const AddCar = {
     name: 'AddCar',
     template: `
     <div class="container maincontainer">
-    <div class="m-4 ">
+    <div class="add_car m-4 ">
         <h1 class="mb-4" id="addnew">Add New Car</h1>
         <form method="POST" class="form" action="" id="car-form" @submit.prevent="addCar()">
             <div class="mt-sm-1 mb-sm-1 d-flex flex-area1">
@@ -700,19 +700,13 @@ const AddCar = {
                     <label class="" for="car_type">Car Type</label><br>
                     <select name="car_type" class="form-control form-field" required>
                         <option value="SUV">SUV</option>
-                        <option value="Truck">Truck</option>
+                        <option value="Hybrid/Electric">Hybrid/Electric</option>                        <option value="Convertible">Convertible</option>
                         <option value="Sedan">Sedan</option>
+                        <option value="Hatchback">Hatchback</option>
                         <option value="Van">Van</option>
-                        <option value="Coupe">Coupe</option>
                         <option value="Wagon">Wagon</option>
-                        <option value="Convertible">Convertible</option>
-                        <option value="Sports Car">Sports Car</option>
                         <option value="Diesel">Diesel</option>
                         <option value="Crossover">Crossover</option>
-                        <option value="Luxury Car">Luxury Car</option>
-                        <option value="Hybrid/Electric">Hybrid/Electric</option>
-                        <option value="Super Car">Super Car</option>
-                        <option value="Hyper Car">Hyper Car</option>
                     </select>
                 </div>
             </div>
