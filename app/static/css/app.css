@@ -110,8 +110,6 @@ img {
   display:flex; 
   flex-direction: column; 
   max-width: 100vw;
- }
-#displayfav { 
   padding-top: 8vh; 
   padding-bottom: 5vh;
 }
@@ -270,7 +268,7 @@ label{
   width: 100%;
 }
 
-.Dahalia-Rodje-color{
+.save_btn_color{
   background-color: #0fb781 !important;
   border-radius: 7px;
 }

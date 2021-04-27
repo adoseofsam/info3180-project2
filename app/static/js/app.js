@@ -92,7 +92,7 @@ const Home = {
                 <p class="mt-2 mb-4 text-secondary">United Auto Sales provides the fastest, easiest and most user friendly way to buy or sell cars online. Find a Great Price on the Vehicle You Want</p>
                 <div class="flex-area">
                     <button @click="toRegister" class="btn bg-primary text-white" type="button">Register</button>
-                    <button @click="toLogin" class="btn text-white Dahalia-Rodje-color" type="button">Login</button>
+                    <button @click="toLogin" class="btn text-white save_btn_color" type="button">Login</button>
                 </div>
             </div>
             <div class="fit col-md-6">
@@ -153,7 +153,7 @@ const Register = {
                     <label class="" for="photo">Upload Photo</label><br>
                     <input type="file" class="form-control" name="photo" accept=".jpeg, .jpg, .png">
                 </div>
-                <button type="submit" name="submit" class="btn  text-white mt-sm-3 mb-sm-1 Dahalia-Rodje-color">Register</button>
+                <button type="submit" name="submit" class="btn  text-white mt-sm-3 mb-sm-1 save_btn_color">Register</button>
             </form>
         </div>
         </div>
@@ -210,7 +210,7 @@ const Login = {
                     <label class="" for="biography">Password</label><br>
                     <input type="password" class="form-control form-field login-field" name="password" required>
                 </div>
-                <button type="submit" name="submit" class="btn  text-white mt-sm-3 mb-sm-1 Dahalia-Rodje-color login-field">Login</button>
+                <button type="submit" name="submit" class="btn  text-white mt-sm-3 mb-sm-1 save_btn_color login-field">Login</button>
             </form>
         </div>
     `,
@@ -307,7 +307,7 @@ const Explore = {
                             <input type="text" class="form-control" name="model" />
                         </div>
                         <div class="form-group search-btn-div">
-                            <button type="submit" class="btn btn-success Dahalia-Rodje-color search-btn">Search</button>
+                            <button type="submit" class="btn btn-success save_btn_color search-btn">Search</button>
                             </div>
                     </form>
                 </div>  
@@ -324,7 +324,7 @@ const Explore = {
                                     <span class="graytext">{{cars.model}}</span>
                                 </div>
 
-                                <a href="#" class="btn btn-success Dahalia-Rodje-color card-price-btn">
+                                <a href="#" class="btn btn-success save_btn_color card-price-btn">
                                     <img class="icons" src='/static/images/tagicon.png'>
                                     <span><span>$</span>{{cars.price}}</span>
                                 </a>
@@ -458,7 +458,7 @@ const Profile = {
                                     <span class="graytext">{{cars.model}}</span>
                                 </div>
 
-                                <a href="#" class="btn btn-success card-price-btn Dahalia-Rodje-color">
+                                <a href="#" class="btn btn-success card-price-btn save_btn_color">
                                     <img class="icons" src='/static/images/tagicon.png'>
                                     <span><span>$</span>{{cars.price}}</span>
                                 </a>
@@ -712,12 +712,12 @@ const AddCar = {
                     <label class="" for="car_type">Car Type</label><br>
                     <select name="car_type" class="form-control form-field" required>
                         <option value="SUV">SUV</option>
-                        <option value="Hybrid/Electric">Hybrid/Electric</option>                        <option value="Convertible">Convertible</option>
+                        <option value="Hybrid/Electric">Hybrid/Electric</option>                        
+                        <option value="Convertible">Convertible</option>
                         <option value="Sedan">Sedan</option>
                         <option value="Hatchback">Hatchback</option>
                         <option value="Van">Van</option>
                         <option value="Wagon">Wagon</option>
-                        <option value="Diesel">Diesel</option>
                         <option value="Crossover">Crossover</option>
                     </select>
                 </div>
@@ -737,7 +737,7 @@ const AddCar = {
                 <label class="" for="photo">Upload Photo</label><br>
                 <input type="file" class="form-control form-field" name="photo" accept=".jpeg, .jpg, .png" required>
             </div>
-            <button type="submit" name="submit" class="btn Dahalia-Rodje-color text-white mt-sm-3 mb-sm-1">Save</button>
+            <button type="submit" name="submit" class="btn save_btn_color text-white mt-sm-3 mb-sm-1">Save</button>
         </form>
     </div>
     </div>

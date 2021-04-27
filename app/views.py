@@ -9,20 +9,20 @@ import os
 import jwt
 import datetime
 from app import app, db, login_manager, csrf
+from .forms import RegisterForm, LoginForm, ExploreForm, CarForm
+from app.models import Users, Cars, Favourites
 from flask import _request_ctx_stack
 from flask import render_template, request, redirect, url_for, flash, jsonify, g, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import Users,Favourites,Cars
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from .forms import RegisterForm, LoginForm, ExploreForm, CarForm
-from app.models import Users, Cars, Favourites
 from functools import wraps
 
-#JWT TOKEN
+#Obtain JWT TOKEN
 def requires_auth(f):
   @wraps(f)
-  def decorated(*args, **kwargs):
+  def obtainedToken(*args, **kwargs):
     auth = request.headers.get('Authorization', None) # or request.cookies.get('token', None)
 
     if not auth:
@@ -49,7 +49,7 @@ def requires_auth(f):
     g.current_user = user = payload
     return f(*args, **kwargs)
 
-  return decorated
+  return obtainedToken
 
 ###
 # Routing for your application.
@@ -62,7 +62,7 @@ def register():
     errors = []
 
     if request.method == 'POST':
-        if form.validate_on_submit():
+        if form.validate_on_submit()==True:
 
             username = form.username.data
             password = form.password.data
@@ -119,7 +119,7 @@ def login():
 
     if request.method == 'POST':
 
-        if form.validate_on_submit():
+        if form.validate_on_submit()==True:
 
             username = form.username.data
             password = form.password.data
@@ -158,7 +158,7 @@ def cars():
 
     if request.method == 'POST':
 
-        if form.validate_on_submit():
+        if form.validate_on_submit()==True:
 
             make = form.make.data
             model = form.model.data
@@ -207,7 +207,7 @@ def cars():
 #HTTP Method: 'GET'
 @app.route('/api/cars', methods=["GET"])
 @requires_auth
-def get_all_cars():
+def getEveryCar():
 
     cars = db.session.query(Cars).all()
     data = []
@@ -380,7 +380,7 @@ def convert(datetime):
 #HTTP Method: 'GET'
 @app.route("/api/users/<user_id>/favourites", methods=["GET"])
 @requires_auth
-def get_user_favourites(user_id):
+def getoneUsersFavourites(user_id):
 
     favourites = Favourites.query.filter_by(user_id=user_id).all()
     data = []
